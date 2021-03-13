@@ -1,4 +1,5 @@
 require("dotenv").config();
+const keepAlive = require("./server");
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
@@ -9,6 +10,8 @@ Object.keys(botCommands).map((key) => {
 });
 
 const TOKEN = process.env.TOKEN;
+
+keepAlive();
 bot.login(TOKEN);
 
 bot.on("ready", () => {
