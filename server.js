@@ -6,6 +6,11 @@ server.all("/", (req, res) => {
   res.send("Bot is running!");
 });
 
+server.post("/", (req, res) => {
+  console.log("Got body:", req.body);
+  res.sendStatus(200);
+});
+
 function keepAlive() {
   server.listen(3000, () => {
     console.log("Server is ready.");
