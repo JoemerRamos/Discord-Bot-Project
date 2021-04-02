@@ -1,14 +1,12 @@
+/*Not meant as a means to handle routing between a web app, this is a web server meant
+for keeping the bot alive*/
+
 const express = require("express");
 
 const server = express();
 
 server.all("/", (req, res) => {
   res.send("Bot is running!");
-});
-
-server.post("/", (req, res) => {
-  console.log("Got body:", req.body);
-  res.sendStatus(200);
 });
 
 function keepAlive() {

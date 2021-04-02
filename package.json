@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.21.1",
     "base64url": "^3.0.1",
     "crypto": "^1.0.1",
     "discord.js": "^12.5.1",

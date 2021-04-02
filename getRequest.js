@@ -1,5 +1,42 @@
 //https://jikan.docs.apiary.io/#reference/0/manga
-const https = require("https");
+const axios = require("axios");
+
+async function apiRequest() {
+  const options = {
+    method: "GET",
+  };
+
+  let animeList = [];
+  let response = await axios.get("https://api.jikan.moe/v3/search/anime?q=jujutsu&order_by=title");
+  console.log(response);
+  response.data.results.forEach((anime) => {
+    animeList.push(anime.title);
+  });
+
+  return animeList;
+}
+
+apiRequest().then((list) => {
+  console.log(list);
+});
+
+/*
+setTimeout(() => {
+  console.log(animeList);
+}, 1000);
+
+console.log(animeList);
+*/
+
+/*
+let titles = [];
+for (anime of animeList.results) {
+  titles.push(anime.title);
+}
+console.log(titles);
+*/
+/*
+Past Code
 const randomstring = require("randomstring");
 const crypto = require("crypto");
 const base64url = require("base64url");
@@ -28,16 +65,4 @@ for (objName in authURL) {
 
 authURLString = authURLString.concat(" HTTP/1.1 Host: http://localhost:3000/");
 console.log(authURLString);
-const req = https.request("https://api.jikan.moe/v3/search/anime?q=Naruto", options, (res) => {
-  console.log(`statusCode: ${res.statusCode}`);
-
-  res.on("data", (d) => {
-    process.stdout.write(d);
-  });
-});
-
-req.on("error", (error) => {
-  console.error(error);
-});
-
-req.end();
+*/
