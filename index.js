@@ -1,5 +1,5 @@
 require("dotenv").config();
-const keepAlive = require("./server");
+const { keepAlive } = require("./server");
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 bot.commands = new Discord.Collection();
@@ -11,11 +11,38 @@ Object.keys(botCommands).map((key) => {
 
 const TOKEN = process.env.TOKEN;
 
-keepAlive();
+keepAlive;
 bot.login(TOKEN);
 
 bot.on("ready", () => {
-  console.info(`Logged in as ${bot.user.tag}!`);
+  bot.api
+    .applications(bot.user.id)
+    .guilds("815610859471896596")
+    .commands.post({
+      data: {
+        name: "hello",
+        description: "hello world command",
+        // possible options here e.g. options: [{...}]
+      },
+    });
+
+  bot.ws.on("INTERACTION_CREATE", async (interaction) => {
+    const command = interaction.data.name.toLowerCase();
+    const args = interaction.data.options;
+
+    if (command === "hello") {
+      // here you could do anything. in this sample
+      // i reply with an api interaction
+      bot.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
+          data: {
+            content: "hello world!!!",
+          },
+        },
+      });
+    }
+  });
 });
 
 bot.on("message", (msg) => {

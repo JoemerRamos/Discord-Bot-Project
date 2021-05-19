@@ -8,17 +8,23 @@ async function apiRequest() {
 
   let animeList = [];
   let response = await axios.get("https://api.jikan.moe/v3/search/anime?q=jujutsu&order_by=title");
-  console.log(response);
+  //console.log(response);
   response.data.results.forEach((anime) => {
     animeList.push(anime.title);
   });
-
+  if (animeList == null) {
+    throw new Error("Couldn't produce anime list");
+  }
   return animeList;
 }
 
-apiRequest().then((list) => {
-  console.log(list);
-});
+apiRequest()
+  .then((list) => {
+    console.log(list);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 /*
 setTimeout(() => {
