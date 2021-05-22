@@ -1,5 +1,5 @@
 module.exports = {
-  name: "!ask",
+  name: "ask",
   description: "Communicates with anime api",
   execute(msg, args) {
     if (msg.mentions.users.size) {

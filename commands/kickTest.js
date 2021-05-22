@@ -1,6 +1,12 @@
 module.exports = {
-  name: "!kick",
+  name: "kick",
   description: "Threatens to kick user out",
+  options: {
+    name: "name",
+    description: "Mention name to kick",
+    required: true,
+    type: 9,
+  },
   execute(msg, args) {
     if (msg.mentions.users.size) {
       const taggedUser = msg.mentions.users.first();
