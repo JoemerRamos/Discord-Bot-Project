@@ -3,6 +3,7 @@ const { keepAlive } = require("./server");
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 const botCommands = require("./commands/exportCommands");
+const getRequest = require("./getRequest");
 const TOKEN = process.env.TOKEN;
 const guildID = "815610859471896596";
 bot.commands = new Discord.Collection();
@@ -30,10 +31,15 @@ bot.on("ready", async () => {
     const { name, options } = interaction.data;
     const command = name.toLowerCase();
 
+    //console.log(test);
     if (command === "ping") {
-      reply(interaction, "pong");
+      reply(interaction, "pong", undefined);
     } else if (command === "kick") {
       reply(interaction, `Kick <@${options[0].value}>`, options[0]);
+    } else if (command === "ask") {
+      const animeList = await getRequest(options[0].value);
+      const { components } = botCommands[command];
+      reply(interaction, `Anime ${animeList}`, options[0], components);
     }
   });
 });
@@ -53,19 +59,24 @@ const createSlashCommand = async (name, description, options) => {
   });
 };
 
-function reply(interaction, response, options = undefined) {
+function reply(interaction, response, options = undefined, components = undefined) {
   let data = {
     type: 4,
     data: {
       content: response,
     },
   };
-
+  //console.log(data);
   if (options) {
     data.allowed_mentions = {
       parse: ["user", "roles"],
       users: [options.value],
     };
+  }
+  //console.log(components);
+  if (components) {
+    //console.log(components);
+    data.data.components = components;
   }
   bot.api.interactions(interaction.id, interaction.token).callback.post({
     data,

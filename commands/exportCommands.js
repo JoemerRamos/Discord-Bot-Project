@@ -1,5 +1,5 @@
 module.exports = {
-  Ping: require("./ping"),
-  Kick: require("./kickTest"),
-  Ask: require("./animeAPI.js"),
+  ping: require("./ping"),
+  kick: require("./kickTest"),
+  ask: require("./animeAPI.js"),
 };
