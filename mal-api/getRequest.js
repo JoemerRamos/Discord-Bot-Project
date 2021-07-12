@@ -17,13 +17,5 @@ async function apiRequest(animeTitle) {
   }
   return animeList.slice(0, 5);
 }
-/*
-apiRequest()
-  .then((list) => {
-    console.log(list);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-*/
+
 module.exports = apiRequest;

@@ -3,7 +3,9 @@ const { keepAlive } = require("./server");
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 const botCommands = require("./commands/exportCommands");
-const getRequest = require("./getRequest");
+const getRequest = require("./mal-api/getRequest");
+const createComponents = require("./mal-api/utilFunctions");
+const { components } = require("./commands/animeAPI");
 const TOKEN = process.env.TOKEN;
 const guildID = "815610859471896596";
 bot.commands = new Discord.Collection();
@@ -28,19 +30,25 @@ bot.on("ready", async () => {
   }
 
   bot.ws.on("INTERACTION_CREATE", async (interaction) => {
-    const { name, options } = interaction.data;
-    const command = name.toLowerCase();
-
-    //console.log(test);
-    if (command === "ping") {
-      reply(interaction, "pong", undefined);
-    } else if (command === "kick") {
-      reply(interaction, `Kick <@${options[0].value}>`, options[0]);
-    } else if (command === "ask") {
-      const animeList = await getRequest(options[0].value);
-      const { components } = botCommands[command];
-      reply(interaction, `Anime ${animeList}`, options[0], components);
+    console.log(interaction);
+    const { type } = interaction;
+    if (type == 2) {
+      const { name, options } = interaction.data;
+      const command = name.toLowerCase();
+      if (command === "ping") {
+        reply(interaction, "pong", undefined);
+      } else if (command === "kick") {
+        reply(interaction, `Kick <@${options[0].value}>`, options[0]);
+      } else if (command === "ask") {
+        const animeList = await getRequest(options[0].value);
+        const components = createComponents(animeList);
+        reply(interaction, `Anime ${animeList}`, options[0], components);
+      }
+    } else if (type == 3) {
+      const { custom_id } = interaction.data;
+      console.log(custom_id);
     }
+    //console.log(test);
   });
 });
 
