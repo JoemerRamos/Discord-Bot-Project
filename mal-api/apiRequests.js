@@ -1,0 +1,42 @@
+//https://jikan.docs.apiary.io/#reference/0/manga
+const axios = require("axios");
+
+async function titlesRequest(animeTitle) {
+  const options = {
+    method: "GET",
+  };
+
+  let animeList = [];
+  let response = await axios.get(`https://api.jikan.moe/v3/search/anime?q=${animeTitle}&order_by=title`);
+  //console.log(response.data.results[0]);
+  response.data.results.forEach((anime) => {
+    animeList.push(anime.title);
+  });
+  if (animeList == null) {
+    throw new Error("Couldn't produce anime list");
+  }
+  return animeList.slice(0, 5);
+}
+
+async function detailsRequest(animeTitle) {
+  const options = {
+    method: "GET",
+  };
+
+  let searchResult = await axios.get(`https://api.jikan.moe/v3/search/anime?q=${animeTitle}&order_by=title`);
+  //console.log(response.data.results[0]);
+  /*response.data.results.forEach((anime) => {
+    animeList.push(anime.title);
+  });*/
+  let animeObj = searchResult.data.results[0];
+
+  if (!animeObj) {
+    throw new Error("Couldn't produce anime list");
+  }
+
+  let { data: animeDetails } = await axios.get(`https://api.jikan.moe/v3/anime/${animeObj.mal_id}`);
+  console.log(animeDetails);
+  return animeDetails;
+}
+
+module.exports = { titlesRequest, detailsRequest };

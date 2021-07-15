@@ -3,7 +3,7 @@ const { keepAlive } = require("./server");
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 const botCommands = require("./commands/exportCommands");
-const getRequest = require("./mal-api/getRequest");
+const { titlesRequest, detailsRequest } = require("./mal-api/apiRequests");
 const createComponents = require("./mal-api/utilFunctions");
 const { components } = require("./commands/animeAPI");
 const TOKEN = process.env.TOKEN;
@@ -30,8 +30,9 @@ bot.on("ready", async () => {
   }
 
   bot.ws.on("INTERACTION_CREATE", async (interaction) => {
-    console.log(interaction);
+    //console.log(interaction);
     const { type } = interaction;
+    //Type 2 is a command interaction
     if (type == 2) {
       const { name, options } = interaction.data;
       const command = name.toLowerCase();
@@ -40,13 +41,40 @@ bot.on("ready", async () => {
       } else if (command === "kick") {
         reply(interaction, `Kick <@${options[0].value}>`, options[0]);
       } else if (command === "ask") {
-        const animeList = await getRequest(options[0].value);
+        const animeName = options[0].value;
+        const animeList = await titlesRequest(animeName);
         const components = createComponents(animeList);
-        reply(interaction, `Anime ${animeList}`, options[0], components);
+        reply(
+          interaction,
+          `You searched: ${animeName}\nChoose which anime title you want more details on:\n`,
+          options[0],
+          components
+        );
       }
+      //Type 3 is a message interaction (A button)
     } else if (type == 3) {
       const { custom_id } = interaction.data;
-      console.log(custom_id);
+      if (custom_id.includes("searchResult")) {
+        //If we choose a specific search result, we want to output and embedded card with all the information for the search result
+        const animeTitle = custom_id.replace("searchResult_", "");
+        console.log(animeTitle);
+        const animeDetails = await detailsRequest(animeTitle);
+        const channel = bot.channels.cache.get("815610859471896600");
+        const embedObj = new Discord.MessageEmbed()
+          .setColor("#0099ff")
+          .setTitle(`${animeTitle}`)
+          .addFields(
+            { name: "English Title", value: animeDetails.title_english },
+            { name: "Status", value: animeDetails.status },
+            { name: "Rating", value: animeDetails.score },
+            { name: "Next Upcoming Episode", value: animeDetails.broadcast }
+          );
+        //reply(interaction, "Test", undefined, undefined, embedObj);
+        channel.send(embedObj);
+        reply(interaction, "");
+        //
+      }
+      //console.log(anime);
     }
     //console.log(test);
   });
@@ -69,7 +97,7 @@ const createSlashCommand = async (name, description, options) => {
 
 function reply(interaction, response, options = undefined, components = undefined) {
   let data = {
-    type: 4,
+    type: 4, //Interaction Callback Type 4 is a channel message with source
     data: {
       content: response,
     },
@@ -86,6 +114,7 @@ function reply(interaction, response, options = undefined, components = undefine
     //console.log(components);
     data.data.components = components;
   }
+
   bot.api.interactions(interaction.id, interaction.token).callback.post({
     data,
   });
