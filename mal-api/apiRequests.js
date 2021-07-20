@@ -1,11 +1,8 @@
 //https://jikan.docs.apiary.io/#reference/0/manga
 const axios = require("axios");
 
+//When anime is searched, function pulls the top 5 results from MAL
 async function titlesRequest(animeTitle) {
-  const options = {
-    method: "GET",
-  };
-
   let animeList = [];
   let response = await axios.get(`https://api.jikan.moe/v3/search/anime?q=${animeTitle}&order_by=title`);
   //console.log(response.data.results[0]);
@@ -18,11 +15,8 @@ async function titlesRequest(animeTitle) {
   return animeList.slice(0, 5);
 }
 
+//When specific anime is searched, grabs the anime's data object
 async function detailsRequest(animeTitle) {
-  const options = {
-    method: "GET",
-  };
-
   let searchResult = await axios.get(`https://api.jikan.moe/v3/search/anime?q=${animeTitle}&order_by=title`);
   //console.log(response.data.results[0]);
   /*response.data.results.forEach((anime) => {
@@ -35,7 +29,7 @@ async function detailsRequest(animeTitle) {
   }
 
   let { data: animeDetails } = await axios.get(`https://api.jikan.moe/v3/anime/${animeObj.mal_id}`);
-  console.log(animeDetails);
+
   return animeDetails;
 }
 
