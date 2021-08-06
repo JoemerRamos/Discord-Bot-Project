@@ -36,12 +36,13 @@ bot.on('interactionCreate', async (interaction) => {
   // Type 2 is a command interaction
   if (interaction.isCommand()) {
     const { commandName, options } = interaction;
-
+    // console.log(interaction);
     try {
       await cmdHandler.get(commandName).execute(interaction, options);
     } catch (error) {
-      console.error(error);
-      await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+      // console.log(JSON.stringify(error));
+      // console.log('hi');
+      interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
     }
   } else if (interaction.isButton()) {
     const { customId } = interaction;
@@ -53,7 +54,8 @@ bot.on('interactionCreate', async (interaction) => {
     }
   }
 });
-
+/*
 async function deleteGuildCommands(guildID) {
   await bot.guilds.cache.get(guildID)?.commands.set([]);
 }
+*/

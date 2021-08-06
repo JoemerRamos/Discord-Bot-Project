@@ -16,7 +16,6 @@ module.exports = {
     const { value: animeName } = options.get('anime');
     const animeList = await titlesRequest(animeName);
     const components = createCompForNextEp(animeList);
-
     interaction.reply({
       content: `You searched: ${animeName}\nChoose which anime title you want more details on:\n`,
       components,
