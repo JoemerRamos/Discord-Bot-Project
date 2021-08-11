@@ -40,8 +40,6 @@ bot.on('interactionCreate', async (interaction) => {
     try {
       await cmdHandler.get(commandName).execute(interaction, options);
     } catch (error) {
-      // console.log(JSON.stringify(error));
-      // console.log('hi');
       interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
     }
   } else if (interaction.isButton()) {

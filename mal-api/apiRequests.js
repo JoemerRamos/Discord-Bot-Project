@@ -5,7 +5,7 @@ const axios = require('axios');
 async function titlesRequest(animeTitle) {
   const animeList = [];
   const response = await axios.get(`https://api.jikan.moe/v3/search/anime?q=${animeTitle}&order_by=title`);
-  console.log('hi');
+  // console.log('hi');
 
   // console.log(response.data.results[0]);
   response.data.results.forEach((anime) => {
