@@ -24,8 +24,7 @@
     "node": "^16.6.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node init.js && node index.js"
   },
   "author": "",
   "license": "ISC",
