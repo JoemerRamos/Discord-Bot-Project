@@ -24,7 +24,7 @@
     "node": "^16.6.1"
   },
   "scripts": {
-    "start": "node init.js && node index.js"
+    "start": "node ./init.js && node ./index.js"
   },
   "author": "",
   "license": "ISC",

@@ -8,6 +8,7 @@ const bot = new Discord.Client({ intents: ['GUILDS', 'GUILD_MESSAGES'] });
 const { createAnimeEmbedNextEp } = require('./mal-api/utilFunctions');
 
 const { TOKEN } = process.env;
+
 const cmdHandler = new Discord.Collection();
 
 keepAlive();
