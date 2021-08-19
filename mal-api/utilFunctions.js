@@ -44,7 +44,7 @@ async function createAnimeEmbedNextEp(btnId, Discord) {
   const animeTitle = btnId.replace('nextEp_', '');
   const animeDetails = await detailsRequest(animeTitle);
   // Check if broadcast time is before or after current day
-  console.log(animeDetails.broadcast.split(' ')[0]);
+  // console.log(animeDetails.broadcast.split(' ')[0]);
   const bcString = decideBroadcastString(animeDetails.broadcast.split(' ')[0], animeDetails.status); // bcString = broadcast string
   const embedObj = new Discord.MessageEmbed()
     .setColor('#0099ff')
